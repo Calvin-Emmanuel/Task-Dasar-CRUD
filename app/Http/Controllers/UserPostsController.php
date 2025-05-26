@@ -2,54 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\UserPosts;
 use App\Exports\UserPostsExport;
 use Maatwebsite\Excel\Facades\Excel;
-use PDF;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facades\PDF;
 
 class UserPostsController extends Controller
 {
 
-    public function run()
+    public function __construct()
     {
-
-        //dd('Done');
-
-        UserPosts::create([
-            'title' => 'This is a test',
-            'description' => 'This is the description'
-
-        ]);
+        $this->middleware('auth')->except(['login', 'logout', 'showLogin']);
     }
 
-    public function insert()
+    public function showLogin()
     {
-        return view('posts.create');
+        return view('posts.login', ['show_logout' => false]);
     }
 
-    public function store(Request $request)
+    public function login(Request $request)
     {
-
-        $validData = $request->validate([
-            'title' => 'required|max:30',
-            'description' => 'required',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:3584',
-            'category_id' => 'required|exists:post_categories,id'
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        $validData['image_path'] = null;
-
-        if ($request->hasFile('img')) {
-            $path = $request->file('img')->store('posts', 'public');
-            $validData['image_path'] = $path;
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('userposts.list'));
         }
 
-        UserPosts::create($validData);
-        return redirect('/posts')->with('success', 'Post created!');
+        return back()->withErrors([
+            'email' => 'E-mail or password is wrong'
+        ])->onlyInput('email');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 
     public function list()
@@ -59,15 +59,61 @@ class UserPostsController extends Controller
         return view('posts.index', compact('posts'));
     }
 
+    public function insert()
+    {
+        return view('posts.create', ['show_logout' => false]);
+    }
+
+    public function store(Request $request)
+    {
+
+        $validData = $request->validate([
+            'title' => 'required|max:30',
+            'description' => 'required',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg|max:3584',
+            'category_id' => 'required|exists:post_categories,id',
+        ]);
+
+        $image_path = null;
+
+        if ($request->hasFile('img')) {
+            $image_path = $request->file('img')->store('posts', 'public');
+        }
+
+        UserPosts::create([
+            'user_id' => auth()->id(),
+            'title' => $validData['title'],
+            'description' => $validData['description'],
+            'category_id' => $validData['category_id'],
+            'image_path' => $image_path,
+        ]);
+        return redirect('/posts')->with('success', 'Post created!');
+    }
+
     public function delete($id)
     {
-        UserPosts::findOrFail($id)->delete();
+        $post = UserPosts::findOrFail($id);
+
+        if (!auth()->user()->is_admin && auth()->id() !== $post->user_id) {
+            abort(403, 'Unauthorized action');
+        }
+
+        if ($post->image_path) {
+            Storage::delete('public' . $post->image_path);
+        }
+
+        $post->delete();
+
         return redirect()->route('userposts.list')->with('success', 'Post deleted');
     }
 
     public function update(Request $request, $id)
     {
         $post = UserPosts::findOrFail($id);
+
+        if (!auth()->user()->is_admin && auth()->id() !== $post->user_id) {
+            abort(403, 'Unauthorized action');
+        }
 
         $validData = $request->validate([
             'title' => 'required|max:30',
@@ -95,22 +141,42 @@ class UserPostsController extends Controller
     public function edit($id)
     {
         $post = UserPosts::with('category')->findOrFail($id);
-        return view('posts.edit', compact('post'));
+        return view('posts.edit', compact('post'), ['show_logout' => false]);
     }
 
     public function excelExport()
     {
-        $this->notifyExports('Excel');
+        // $this->notifyExports('Excel');
 
         return Excel::download(new UserPostsExport, 'userposts' . now()->format('d-m-Y H:i') . '.xlsx');
     }
 
     public function pdfExport()
     {
-        $this->notifyExports('PDF');
-        $posts = UserPosts::with('category')->get();
+        // $this->notifyExports('PDF');
+        $query = UserPosts::with(['category', 'user']);
 
-        return PDF::loadview('posts.userpostspdf', ['posts' => $posts])
+        if (!auth()->user()->is_admin) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $posts = $query->get()->map(function ($post) {
+            return [
+                'id' => auth()->user()->is_admin ? $post->id : 'Hidden',
+                'user_id' => auth()->user()->is_admin ? $post->id : 'Hidden',
+                'title' => $post->title,
+                'description' => $post->description,
+                'category' => $post->category->name ?? '',
+                'image_path' => $post->image_path,
+                'created_at' => $post->created_at->format('d-m-Y H:i'),
+                'updated_at' => $post->updated_at->format('d-m-Y H:i')
+            ];
+        });
+
+        return PDF::loadview('posts.userpostspdf', [
+            'posts' => $posts,
+            'is_admin' => auth()->user()->is_admin
+        ])
             ->setPaper('a4', 'landscape')
             ->download('userposts' . now()->format('d-m-Y H:i' . '.pdf'));
     }
@@ -128,30 +194,43 @@ class UserPostsController extends Controller
 
     public function datatable(Request $request)
     {
-        $posts = UserPosts::with('category')->select('userposts.*');
+        $posts = UserPosts::with(['category', 'user']);
+
+        if (!auth()->user()->is_admin) {
+            $posts->where('user_id', auth()->id());
+        }
 
         return DataTables::of($posts)
             ->addIndexColumn()
             ->addColumn('action', function ($post) {
-                $editBtn = '<form action="' . route('userposts.edit', $post->id) . '" method="GET" 
+                $buttons = '';
+
+                if (auth()->user()->is_admin == true || auth()->id() === $post->user_id) {
+
+
+                    $editBtn = '<form action="' . route('userposts.edit', $post->id) . '" method="GET" 
                 style= "display: inline">
                 <button type="submit" class="btn btn-primary btn-sm">Update</button></form>';
 
-                $delBtn = '<form action="' . route('userposts.delete', $post->id) . '" method="POST" 
+                    $delBtn = '<form action="' . route('userposts.delete', $post->id) . '" method="POST" 
                 style= "display: inline">
-                <input type="hidden" name="_token" value="' . csrf_token() . '">
-                <input type="hidden" name="_method" value="DELETE">
+                ' . csrf_field() . '' . method_field('DELETE') . '
                 <button type="submit" class="btn btn-danger btn-sm" onclick="
                 return confirm(\'Are you sure you want to delete this post?\')">Delete</button></form>';
 
-                return  '<div>' . $editBtn . $delBtn . '</div>';
+                    $buttons =  $editBtn . $delBtn;
+                    return $buttons;
+                }
             })
             ->addColumn('image', function ($post) {
                 if ($post->image_path) {
                     return '<img src="' . asset('storage/' . $post->image_path) . '" 
-                    style="max-height:100px; max-width:100px">';
+                    style="max-width: 100px; max-height: 100px; display: inline-block; vertical-align: middle;">';
                 }
                 return '<p style="text-align: center"> No Image </p>';
+            })
+            ->addColumn('user_id', function ($post) {
+                return auth()->user()->is_admin ? $post->user_id : 'Hidden';
             })
             ->editColumn('created_at', function ($post) {
                 return $post->created_at->format('Y-m-d H:i');

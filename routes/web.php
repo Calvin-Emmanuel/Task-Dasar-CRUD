@@ -16,33 +16,36 @@
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\UserPostsController;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/hello', 'HelloController@index');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('userposts', 'UserPostsController')->except(['loginRedirect', 'login']);
 
-Route::get('/', 'HelloController@greet');
+    Route::get('/posts/insert', 'UserPostsController@insert')->name('userposts.insert');
 
-Route::get('/user/{id}', 'HelloController@show');
+    Route::post('/posts', 'UserPostsController@store')->name('userposts.store');
 
-Route::get('/run', 'UserPostsController@run');
+    Route::get('/posts', 'UserPostsController@list')->name('userposts.list');
 
-Route::get('/posts/insert', 'UserPostsController@insert')->name('userposts.insert');
+    Route::delete('/posts/{id}', 'UserPostsController@delete')->name('userposts.delete');
 
-Route::post('/posts', 'UserPostsController@store')->name('userposts.store');
+    Route::put('/posts/{id}', 'UserPostsController@update')->name('userposts.update');
 
-Route::get('/posts', 'UserPostsController@list')->name('userposts.list');
+    Route::get('/posts/{id}/edit', 'UserPostsController@edit')->name('userposts.edit');
 
-Route::delete('/posts/{id}', 'UserPostsController@delete')->name('userposts.delete');
+    Route::get('/posts/export/excel', 'UserPostsController@excelExport')->name('userposts.export.excel');
 
-Route::put('/posts/{id}', 'UserPostsController@update')->name('userposts.update');
+    Route::get('/posts/export/pdf', 'UserPostsController@pdfExport')->name('userposts.export.pdf');
 
-Route::get('/posts/{id}/edit', 'UserPostsController@edit')->name('userposts.edit');
+    Route::get('/posts/datatable', 'UserPostsController@datatable')->name('userposts.datatable');
 
-Route::get('/posts/export/excel', 'UserPostsController@excelExport')->name('userposts.export.excel');
-
-Route::get('/posts/export/pdf', 'UserPostsController@pdfExport')->name('userposts.export.pdf');
-
-Route::get('/posts/datatable', 'UserPostsController@datatable')->name('userposts.datatable');
-
-Route::get('/debug-datatable', function () {
-    return app()->make('App\Http\Controllers\UserPostsController')->datatable(request());
+    Route::get('/about', 'AboutController@about')->name('about');
 });
+
+Route::redirect('/', '/login');
+
+Route::get('/login', 'UserPostsController@showLogin')->name('login');
+
+Route::post('/login', 'UserPostsController@login')->name('login.post');
+
+Route::post('/logout', 'UserPostsController@logout')->name('userposts.logout');

@@ -62,17 +62,15 @@ class UserPostsObserver
         //
     }
 
-    private function sendNotification(UserPosts $post, string $action){
-        $subject = "Post with ID {$post->id} was {$action}";
+    private function sendNotification(UserPosts $post, string $action)
+    {
+        $subject = "User {$post->user_id} with Post ID {$post->id}";
         $action = ucfirst($action);
-        $message = "Post ID: {$post->id} \nPost Title: {$post->title} \nPost Description: {$post->description} \nPost Action: {$action}";
+        $message = "User ID: {$post->user_id} \nPost ID: {$post->id} \nPost Title: {$post->title} \nPost Description: {$post->description} \nPost Action: {$action}";
 
-    Mail::raw($message, function ($mail) use ($subject){
-        $mail   ->to('test@example.com')
-                ->subject($subject);
-    });
-
+        // Mail::raw($message, function ($mail) use ($subject) {
+        //     $mail->to('test@example.com')
+        //         ->subject($subject);
+        // });
     }
-
-    
 }
