@@ -1,4 +1,4 @@
-@extends('postsLayout.layout')
+@extends('postsLayout.basicLayout')
 
 @section('title', 'Post Creation')
 
@@ -20,33 +20,49 @@
 
         <div>
             <form action="{{ route('userposts.store') }}" method="post" enctype="multipart/form-data">
+                <fieldset class="mb-3">
                 @csrf
 
-                <div class="form-group row">
-                    <label for="title" class="col-form-label col-lg-2">Title: </label>
-                    <div class="col-lg-10">
-                        <input type="text" name="title" id="title" autocomplete="off" class="form-control">
-                    </div> 
-                </div>
+                    <div class="form-group row">
+                        <label for="title" class="col-form-label col-lg-2">Title </label>
+                        <div class="col-lg-10">
+                            <input type="text" name="title" id="title" autocomplete="off" class="form-control">
+                        </div> 
+                    </div>
 
-                <label for="desc">Description: </label>
-                <textarea name="description" id="desc" autocomplete="off"></textarea>
-                <br>
-                <label for="img">Post Image: </label>
-                <input type="file" name="img" id="img">
-                <br>
-                <label for="cat">Post Category: </label>
-                <select name="category_id" id="cat" required>
-                    <option value="">Select Category</option>
-                    @foreach(App\Models\PostCategory::all() as $category)
-                        <option value="{{ $category->id }}"
-                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <br>
-                <button type="submit">Create Post</button>
+                    <div class="form-group row">
+                        <label for="desc" class="col-form-label col-lg-2">Description </label>
+                        <div class="col-lg-10">
+                            <textarea name="description" id="desc" autocomplete="off" rows="3" cols="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="img" class="col-form-label col-lg-2">Post Image </label>
+                        <div class="col-lg-10">
+                            <input type="file" name="img" class="form-control h-auto">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="cat" class="col-form-label col-lg-2">Post Category </label>
+                        <div class="col-lg-10">
+                            <select name="category_id" id="cat" class="custom-select" required>
+                                <option value="">Select Category</option>
+                                @foreach(App\Models\PostCategory::all() as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="btn btn-primary">Create Post</button>
+                    </div>
+                </fieldset>
             </form>
         </div>
     </div>

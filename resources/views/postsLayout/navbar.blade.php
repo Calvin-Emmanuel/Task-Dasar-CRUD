@@ -1,54 +1,31 @@
-<style>
-    body {
-        margin: 0 !important;  /* Remove default body margin */
-        padding: 0 !important; /* Remove default body padding */
-    }
-    .navbar {
-        padding-top: 0 !important;  /* Remove navbar top padding */
-        padding-bottom: 0 !important;
-    }
-</style>
-
-<nav class="navbar navbar-expand-lg w-100" style="background-color:rgba(178, 247, 224, 0.527); border-bottom: 3px solid #2d5263">
-    <div class="container-fluid" style="margin-bottom: 3px; margin-left: 0.3rem; ">
-        <div style="display: inline-flex; align-items: center; gap: 8px;">  <!-- Forced minimum width -->
-            <a class="navbar-brand p-0" href="{{ route('userposts.list') }}">
-                <img src="{{ asset('global_assets/images/star.png') }}" 
-                     alt="App Logo" 
-                     style="height:30px; width:30px; display:block;">
+<div style="max-height: 275px; overflow: visible; box-shadow: 0 -1px 0 0 rgba(0,0,0,0.125), 1px 0 0 0 rgba(0,0,0,0.125) inset, -1px 0 0 0 rgba(0,0,0,0.125) inset, 0 1px 0 0 rgba(0,0,0,0.125);">
+    <div class="navbar navbar-dark navbar-expand-xl" style="align-items: center">
+        <div class="navbar-brand" style="display: inline-flex; gap: 10px; align-items:center">
+            <a href="
+                    @auth
+                        @unless(request()->is('login')) 
+                            {{ route('userposts.list') }}
+                        @endunless
+                    @endauth " class="d-inline-block">
+                <img src="{{ asset('global_assets/images/star.png') }}" alt="" style="width: 40px; height: 40px;">
             </a>
-            <h1 class="h5 mb-0" style="margin-left: -13.5rem; color: #000000;" !important>CRUD Task</h1>
+            <p class="h5 mb-0">CRUD Task</p>
         </div>
-        @if($show_logout ?? true)
-            
-        @endif
         @auth
             @unless(request()->is('login'))
-                <div style="color: #000000;">
-                    <h3>Logged in as:</h3>
+                <div style="margin-right: 1rem">
+                            <a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
+                                <img src="{{ asset('global_assets/images/placeholders/placeholder.jpg') }}" class="rounded-circle mr-2" height="34" alt="">
+                                <span>{{ Auth::user()->name }}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="margin-right: 1rem">
+                                <form action="{{ route('userposts.logout') }}" method="POST" style="margin-left: 1rem; margin-right: 1rem;"> 
+                                    @csrf 
+                                    <button type="submit" class="btn btn-primary form-control">Log out</button>
+                                </form>
+                            </div>
                 </div>
-        
-                <div class="d-flex align-items-center gap-2">
-                    <img src="{{ asset('global_assets/images/pie-chart.png') }}" alt="User Picture" 
-                    style="width: 32px; height: 32px; object-fit: cover;" class="rounded-circle align-middle">
-                    <span style="color: #000000; font-size: 24px; 
-                    line-height:32px; position:relative; top:-8px;">{{ Auth::user()->name }}</span>
-                </div>
-                @if($show_logout ?? true)
-                    <form method="POST" action="{{ route('userposts.logout') }}" class="mb-0">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class=""></i> Logout
-                        </button>
-                    </form>
-                @else 
-                    <div>
-                        <form action="{{ route('userposts.list') }}" method="GET">
-                            <button type="submit">Return to dashboard</button>
-                        </form>
-                    </div>
-                @endif
-            @endunless
-        @endauth
+                @endunless
+            @endauth    
     </div>
-</nav>
+</div>

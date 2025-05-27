@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 
-        <link rel="stylesheet" href="{{ asset('global_assets\css\bootsrap.min.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ asset('global_assets\css\bootstrap.min.css') }}" type="text/css">
         <link rel="stylesheet" href="{{asset('global_assets\css\bootstrap_limitless.min.css') }}"  type="text/css">
         <link rel="stylesheet" href="{{asset('global_assets\csslayout.min.css') }}"  type="text/css">
         <link rel="stylesheet" href="{{asset('global_assets\css\components.min.css') }}"  type="text/css">

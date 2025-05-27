@@ -61,7 +61,7 @@ class UserPostsController extends Controller
 
     public function insert()
     {
-        return view('posts.create', ['show_logout' => false]);
+        return view('posts.create', ['show_logout' => true]);
     }
 
     public function store(Request $request)
@@ -141,7 +141,7 @@ class UserPostsController extends Controller
     public function edit($id)
     {
         $post = UserPosts::with('category')->findOrFail($id);
-        return view('posts.edit', compact('post'), ['show_logout' => false]);
+        return view('posts.edit', compact('post'), ['show_logout' => true]);
     }
 
     public function excelExport()

@@ -1,4 +1,4 @@
-@extends('postsLayout.layout')
+@extends('postsLayout.basicLayout')
 
 @section('title', 'Login')
 
@@ -24,8 +24,8 @@
             <fieldset class="mb-3">
                 @csrf
                 <div class="form-group row">                               
-                    <label for="email" class="col-form-label col-lg-3">E-mail</label>
-                    <div class="col-lg-9">
+                    <label for="email" class="col-form-label col-lg-2">E-mail</label>
+                    <div class="col-lg-10">
                         <input type="text" id="email" name="email" class="form-control" required>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-lg-10 offset-lg-2">
+                    <div class="col-lg-10">
                         <button type="submit" class="btn btn-primary">Log in</button>
                     </div>
                 </div>

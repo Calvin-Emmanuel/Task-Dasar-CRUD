@@ -1,4 +1,4 @@
-@extends('postsLayout.layout')
+@extends('postsLayout.basicLayout')
 
 @section('title', 'Dashboard')
 
@@ -21,12 +21,13 @@
         width: calc(100% - 1rem);
         margin: 1rem auto;
         border-collapse: collapse;
+        border: 1.5px solid #000000;
     }
 
     /* Table header styling */
     table.dataTable thead th {
         padding: 12px 15px;
-        border-top: 1px solid #000000 !important;
+        border: 1.5px solid #000000 !important;
         font-weight: bold;
     }
 
@@ -34,6 +35,20 @@
     table.dataTable tbody td {
         padding: 10px 15px;
         vertical-align: middle;
+    }
+
+    table.dataTable thead th,
+    table.dataTable tbody td {
+        border: 1.5px solid #000000 !important; /* Make all borders consistent */
+        padding: 10px 15px;
+    }
+
+    table.dataTable tbody tr td:first-child,
+    table.dataTable thead tr th:first-child {
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        border-bottom: none;
     }
 
     /* Top controls (search, length menu) */
@@ -85,7 +100,7 @@
 
         <div class="datatable-container">
             <form action="{{ route('userposts.insert') }}" method="GET">
-                <button type="submit">Create new post</button>
+                <button type="submit" class="btn btn-primary">Create new post</button>
             </form>
             <br>
 
@@ -112,10 +127,10 @@
             <br>
             <div style="display:flex; gap: 5px">
                 <form action="{{ route('userposts.export.excel') }}" method="GET">
-                    <button type="submit">Export to Excel</button>
+                    <button type="submit" class="btn btn-success">Export to Excel</button>
                 </form>
                 <form action="{{ route('userposts.export.pdf') }}" method="GET">
-                    <button type="submit"> Export to PDF</button>
+                    <button type="submit" class="btn btn-danger"> Export to PDF</button>
                 </form>
             </div>
     </div>
@@ -163,7 +178,7 @@
                         zeroRecords: "No matching posts found"
                     },
                     columns: [
-                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'dt-center' },
                         { data: 'action', name: 'action', orderable: false, searchable: false, className: 'dt-center'},
                         { data: 'id', name: 'id' , orderable: false, className: 'dt-center', 
                                 visible: {{ auth()->user()->is_admin ? 'true' : 'false' }}},
