@@ -1,4 +1,4 @@
-@extends('postsLayout.basicLayout')
+@extends('layouts.basicLayout')
 
 @section('title', 'Dashboard')
 
@@ -101,6 +101,7 @@
         <div class="datatable-container">
             <form action="{{ route('userposts.insert') }}" method="GET">
                 <button type="submit" class="btn btn-primary">Create new post</button>
+                <a href="{{ route('dashboard') }}" class="btn btn-info">Return to Dashboard</a>
             </form>
             <br>
 
@@ -108,15 +109,15 @@
                 <thead>
                     <tr>
                         <th style="width: 2%;">No.</th>
-                        <th style="width: 18%;">Action</th>
+                        <th style="width: 24%;">Action</th>
                         <th style="width: 2%;">Post ID</th>
                         <th style="width: 2%;">User ID</th>
                         <th style="width: 5%;">Title</th>
-                        <th style="width: 25%;">Description</th>
+                        <th style="width: 23%;">Description</th>
                         <th style="width: 10%;">Image</th>
                         <th style="width: 8%;">Category</th>
-                        <th style="width: 14%;">Creation Date</th>
-                        <th style="width: 14%;">Last Updated At</th>
+                        <th style="width: 12%;">Creation Date</th>
+                        <th style="width: 12%;">Last Updated At</th>
                     </tr>
                 </thead>
                 <tbody>

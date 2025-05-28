@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <link rel="stylesheet" href="{{ asset('global_assets\css\bootstrap.min.css') }}" type="text/css">
         <link rel="stylesheet" href="{{asset('global_assets\css\bootstrap_limitless.min.css') }}"  type="text/css">
@@ -38,6 +39,14 @@
 
         @yield('css')
         <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow-x: hidden; /* Prevents double scrollbars */
+                overflow-y: auto;
+            }
+
             .all{
                 margin-left: 2rem;
                 margin-right: 2rem;
@@ -53,22 +62,51 @@
                 cursor: pointer;
             }
 
-            .dropdown-menu{
-                z-index: 999999 !important;
-                position: absolute !important;
+            .navbar {
+                position: fixed;
+                width: 100%;
+            }
+
+            .sidebar:not(:hover) ~.flex-grow-1 .main-content {
+                margin-left: 70px;
+                transition: margin-left 0.3s ease;
+            }
+
+            .sidebar:hover ~.flex-grow-1 .main-content {
+                margin-left: 140px;
+                transition: margin-left 0.3s ease;
+            }
+
+            .card {
+                min-width: 250px; /* Prevent cards from becoming too narrow */
+                margin: 0 auto; /* Center cards in their columns */
+            }
+
+            .main-content{
+                margin-top: 72px;
+                padding-top: 5px;
             }
         </style>
+        @include('layouts.sidebarcss')
     </head>
     <body>
+        <div class="wrapper d-flex">
+            @unless(request()->is('login'))
+                <div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+                    @include('layouts.sidebar')
+                </div>
+            @endunless
 
-        @include('postsLayout.navbar')
+            <div class="flex-grow-1">
+                @include('layouts.navbar')
 
-        @include('postsLayout.sidebar')
+                <div class="main-content">
+                    @yield('content')
+                </div>
+            </div>
+                
 
-        @yield('content')
-
-
-
+        </div>
 
         @yield('js')
         

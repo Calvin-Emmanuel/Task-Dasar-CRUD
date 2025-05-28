@@ -36,7 +36,7 @@ class UserPostsController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('userposts.list'));
+            return redirect()->intended(route('dashboard'));
         }
 
         return back()->withErrors([
@@ -52,16 +52,21 @@ class UserPostsController extends Controller
         return redirect('/');
     }
 
+    public function dashboard()
+    {
+        return view('posts.dashboard');
+    }
+
     public function list()
     {
         $posts = UserPosts::all();
 
-        return view('posts.index', compact('posts'));
+        return view('posts.posts', compact('posts'));
     }
 
     public function insert()
     {
-        return view('posts.create', ['show_logout' => true]);
+        return view('posts.create');
     }
 
     public function store(Request $request)
@@ -141,7 +146,7 @@ class UserPostsController extends Controller
     public function edit($id)
     {
         $post = UserPosts::with('category')->findOrFail($id);
-        return view('posts.edit', compact('post'), ['show_logout' => true]);
+        return view('posts.edit', compact('post'));
     }
 
     public function excelExport()

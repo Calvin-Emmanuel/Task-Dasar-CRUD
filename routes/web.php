@@ -40,6 +40,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/datatable', 'UserPostsController@datatable')->name('userposts.datatable');
 
     Route::get('/about', 'AboutController@about')->name('about');
+
+    Route::get('/dashboard', 'UserPostsController@dashboard')->name('dashboard');
+
+    Route::get('/profile', 'ProfileController@show')->name('profile.show');
+
+    Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
+
+    Route::put('/profile', 'ProfileController@update')->name('profile.update');
+
+    Route::get('/users', 'UsersController@list')->name('users.list');
+
+    Route::get('/users/datatable', 'UsersController@getUsersData')->name('users.get.data');
+
+    Route::get('/users/{id}/edit', 'UsersController@edit')->name('users.edit');
+
+    Route::put('/users/{id}', 'UsersController@update')->name('users.update');
+
+    Route::get('/users/insert', 'UsersController@insert')->name('users.insert');
+
+    Route::post('/users/store', 'UsersController@store')->name('users.store');
+
+    Route::delete('/users/delete', 'UsersController@delete')->name('users.delete');
 });
 
 Route::redirect('/', '/login');

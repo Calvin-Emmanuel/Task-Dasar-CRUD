@@ -1,4 +1,4 @@
-@extends('postsLayout.basicLayout')
+@extends('layouts.basicLayout')
 
 @section('title', 'Post Creation')
 
