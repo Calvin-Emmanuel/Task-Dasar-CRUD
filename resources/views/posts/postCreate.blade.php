@@ -61,6 +61,7 @@
                     
                     <div>
                         <button type="submit" class="btn btn-primary">Create Post</button>
+                        <a href="{{ route('userposts.list') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </fieldset>
             </form>

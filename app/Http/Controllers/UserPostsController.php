@@ -214,11 +214,11 @@ class UserPostsController extends Controller
 
 
                     $editBtn = '<form action="' . route('userposts.edit', $post->id) . '" method="GET" 
-                style= "display: inline">
+                style= "display: inline-block; margin-right: 5px;">
                 <button type="submit" class="btn btn-primary btn-sm">Update</button></form>';
 
                     $delBtn = '<form action="' . route('userposts.delete', $post->id) . '" method="POST" 
-                style= "display: inline">
+                style= "display: inline-block;">
                 ' . csrf_field() . '' . method_field('DELETE') . '
                 <button type="submit" class="btn btn-danger btn-sm" onclick="
                 return confirm(\'Are you sure you want to delete this post?\')">Delete</button></form>';

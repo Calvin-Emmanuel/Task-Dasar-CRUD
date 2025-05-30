@@ -57,6 +57,7 @@
             </table>
         @else
             <div class="alert alert-danger">You do not have permission to view this page</div>
+            <a href="{{ route('dashboard') }}" class="btn btn-info">Return to Dashboard</a>
         @endif
     </div>
 @endsection

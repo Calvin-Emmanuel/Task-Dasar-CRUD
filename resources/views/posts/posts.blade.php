@@ -67,15 +67,6 @@
         cursor: pointer;
     }
 
-
-    /* Remove default sorting icons */
-    table.dataTable thead .sorting,
-    table.dataTable thead .sorting_asc,
-    table.dataTable thead .sorting_desc {
-        background-image: none;
-    }
-
-
     </style>
 @endsection
 @section('content')
@@ -107,13 +98,13 @@
 
             <table border="1" cellspacing="0" cellpadding="5" class='table datatable-basic'>
                 <thead>
-                    <tr>
+                    <tr style="text-align: center;">
                         <th style="width: 2%;">No.</th>
-                        <th style="width: 24%;">Action</th>
+                        <th style="min-width:200px">Action</th>
                         <th style="width: 2%;">Post ID</th>
                         <th style="width: 2%;">User ID</th>
                         <th style="width: 5%;">Title</th>
-                        <th style="width: 23%;">Description</th>
+                        <th style="width: 27%;">Description</th>
                         <th style="width: 10%;">Image</th>
                         <th style="width: 8%;">Category</th>
                         <th style="width: 12%;">Creation Date</th>
@@ -150,7 +141,6 @@
                 $('.datatable-basic').DataTable({
                     processing: true,
                     serverSide: true,
-                    ordering: false,
                     ajax: {
                         url: "{{ route('userposts.datatable') }}",
                         type: "GET",
@@ -179,9 +169,9 @@
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'dt-center' },
                         { data: 'action', name: 'action', orderable: false, searchable: false, className: 'dt-center'},
-                        { data: 'id', name: 'id' , orderable: false, className: 'dt-center', 
+                        { data: 'id', name: 'id' , className: 'dt-center', 
                                 visible: {{ auth()->user()->is_admin ? 'true' : 'false' }}},
-                        { data: 'user_id', name: 'user_id', className: 'dt-center', 
+                        { data: 'user_id', name: 'user_id', orderable: false, className: 'dt-center', 
                                 visible: {{ auth()->user()->is_admin ? 'true' : 'false' }}},
                         { data: 'title', name: 'title' , orderable: false, className: 'dt-center'},
                         { data: 'description', name: 'description' , orderable: false},
