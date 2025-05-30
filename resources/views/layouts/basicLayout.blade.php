@@ -28,13 +28,15 @@
         <!-- /Global styling -->
 
         <!-- Global js -->
-        <script src="{{asset('global_assets\js\main\jquery.min.js') }}"></script>
-        <script src="{{asset('global_assets\js\main\bootstrap.bundle.min.js') }}"></script>
-        <script src="{{asset('global_assets\js\plugins\loaders\blockui.min.js') }}"></script>
-        <script src="{{asset('global_assets\js\plugins\forms\selects\select2.min.js')}}"></script>
-        <script src="{{asset('assets\js\jquery.mask.js') }}"></script>
+        <script src="{{asset('global_assets/js/main/jquery.min.js') }}"></script>
+        <script src="{{asset('global_assets/js/main/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{asset('global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="{{asset('global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
+        <script src="{{asset('global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+        <script src="{{asset('assets/js/jquery.mask.js') }}"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-        <script src="{{asset('assets\js\custom.js') }}"></script>
+        <script src="{{asset('assets/js/custom.js') }}"></script>
         <!-- /Global js -->
 
         @yield('css')

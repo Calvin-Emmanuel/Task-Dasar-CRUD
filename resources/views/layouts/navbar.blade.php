@@ -9,7 +9,7 @@
                     @endauth " class="d-inline-block">
                 <img src="{{ asset('global_assets/images/star.png') }}" alt="" style="width: 40px; height: 40px;">
             </a>
-            <p class="h5 mb-0">CRUD Task</p>
+            <p class="h5 mb-0">Posts Project</p>
         </div>
         @auth
             @unless(request()->is('login'))

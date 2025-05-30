@@ -138,8 +138,6 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
 
 
@@ -170,7 +168,7 @@
                     pageLength: 10,
                     lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
                     language: {
-                        searchPlaceholder: "Search here...",
+                        searchPlaceholder: "Search posts...",
                         paginate: {
                             previous: '← Previous',
                             next: '→ Next',

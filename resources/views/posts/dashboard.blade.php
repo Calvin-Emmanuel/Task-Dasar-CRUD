@@ -54,7 +54,7 @@
                                     <i class="fas fa-users fa-3x text-info"></i>
                                 </div>
 
-                                <a href="{{ route('users.list') }}" class="btn btn-info mt-auto">View User List (WIP)</a>
+                                <a href="{{ route('users.list') }}" class="btn btn-info mt-auto">View User List</a>
                             </div>
                         </div>
                     </div>

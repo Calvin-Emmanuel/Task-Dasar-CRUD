@@ -26,9 +26,9 @@
                 @auth
                     @if(auth()->user()->is_admin)
                         <li class="nav-item">
-                            <a href="" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                            <a href="{{ route('users.list') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
                                 <i class="fas fa-users"></i>
-                                <span>User List (WIP)</span>
+                                <span>User List</span>
                             </a>
                         </li>
                     @endif

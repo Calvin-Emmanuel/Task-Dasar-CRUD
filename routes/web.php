@@ -61,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/users/store', 'UsersController@store')->name('users.store');
 
-    Route::delete('/users/delete', 'UsersController@delete')->name('users.delete');
+    Route::delete('/users/delete{id}', 'UsersController@delete')->name('users.delete');
 });
 
 Route::redirect('/', '/login');

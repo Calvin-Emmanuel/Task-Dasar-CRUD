@@ -66,7 +66,7 @@ class UserPostsController extends Controller
 
     public function insert()
     {
-        return view('posts.create');
+        return view('posts.postCreate');
     }
 
     public function store(Request $request)
@@ -146,7 +146,7 @@ class UserPostsController extends Controller
     public function edit($id)
     {
         $post = UserPosts::with('category')->findOrFail($id);
-        return view('posts.edit', compact('post'));
+        return view('posts.postEdit', compact('post'));
     }
 
     public function excelExport()
