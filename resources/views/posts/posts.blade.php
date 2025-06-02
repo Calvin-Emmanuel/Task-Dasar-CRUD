@@ -129,9 +129,6 @@
 @endsection
 
 @section('js')
-
-
-
     <script>
         var DatatableBasic = function () {
             var _componentDatatableBasic = function () {

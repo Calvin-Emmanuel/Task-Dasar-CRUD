@@ -71,3 +71,7 @@ Route::get('/login', 'UserPostsController@showLogin')->name('login');
 Route::post('/login', 'UserPostsController@login')->name('login.post');
 
 Route::post('/logout', 'UserPostsController@logout')->name('userposts.logout');
+
+Route::get('/register', 'UsersController@register')->name('users.register');
+
+Route::post('/register/guest', 'UsersController@guest')->name('users.guest');

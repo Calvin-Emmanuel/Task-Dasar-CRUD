@@ -17,8 +17,16 @@
         </div>
         <div>
             @if ($errors->any())
-                <p>E-mail or password is wrong</p>
+                <p class="alert alert-danger">
+                    E-mail or password is wrong
+                </p>
             @endif
+
+            @if(session('success'))  
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         </div>
         <form action="{{ route('login.post') }}" method="POST">
             <fieldset class="mb-3">
@@ -40,6 +48,7 @@
                 <div class="form-group row">
                     <div class="col-lg-10">
                         <button type="submit" class="btn btn-primary">Log in</button>
+                        <a href="{{ route('users.register') }}" class="btn btn-info">Register new user</a>
                     </div>
                 </div>
             </fieldset>

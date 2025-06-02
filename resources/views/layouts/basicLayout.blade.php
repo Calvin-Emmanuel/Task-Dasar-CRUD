@@ -93,11 +93,13 @@
     </head>
     <body>
         <div class="wrapper d-flex">
-            @unless(request()->is('login'))
-                <div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
-                    @include('layouts.sidebar')
-                </div>
-            @endunless
+            @auth
+                @unless(request()->is('login'))
+                    <div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+                        @include('layouts.sidebar')
+                    </div>
+                @endunless
+            @endauth
 
             <div class="flex-grow-1">
                 @include('layouts.navbar')

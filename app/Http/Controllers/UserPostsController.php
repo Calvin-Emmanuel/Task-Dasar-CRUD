@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
-use Barryvdh\DomPDF\Facades\PDF;
+use PDF;
 
 class UserPostsController extends Controller
 {

@@ -102,4 +102,28 @@ class UsersController extends Controller
 
         return redirect('/users')->with('success', 'User deleted!');
     }
+
+    public function register()
+    {
+        return view('users.userRegister');
+    }
+
+    public function guest(Request $request)
+    {
+        $validData = $request->validate([
+            'name' => 'required|max:32',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+            'is_admin' => 'required|boolean'
+        ]);
+
+        User::create([
+            'name' => $validData['name'],
+            'email' => $validData['email'],
+            'password' => bcrypt($validData['password']),
+            'is_admin' => $validData['is_admin']
+        ]);
+
+        return redirect('/login')->with('success', 'User registered!');
+    }
 }
